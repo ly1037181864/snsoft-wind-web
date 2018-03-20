@@ -2,11 +2,16 @@ package snsoft.wind.controller;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.baomidou.kisso.common.util.RandomUtil;
+import com.baomidou.kisso.web.waf.request.WafRequestWrapper;
+
+import snsoft.wind.constant.SnBaseConstant;
 import snsoft.wind.entity.SnUser;
 import snsoft.wind.service.ISnUserService;
 
@@ -32,6 +37,20 @@ public class SnAccountController extends SnBaseController
 	@RequestMapping(value = "/login")
 	public String index(Model model)
 	{
+		if (isPost())
+		{
+			String errorMsg = "用户名或密码错误";
+			// 过滤 XSS SQL 注入
+			WafRequestWrapper wr = new WafRequestWrapper(request);
+			String ctoken = wr.getParameter("ctoken");
+			String captcha = wr.getParameter("captcha");
+			if (StringUtils.isNotBlank(captcha))
+			{
+				String loginName = wr.getParameter("loginName");
+				String password = wr.getParameter("password");
+			}
+		}
+		model.addAttribute(SnBaseConstant.CAPTCHA_TOKEN, RandomUtil.get32UUID());
 		return "/login";
 	}
 

@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.baomidou.kisso.common.util.HttpUtil;
+
 /**
  * <p>项目标题： TODO</p>
  * <p>项目功能： </p>
@@ -32,4 +34,12 @@ public class SnBaseController
 	protected HttpSession session;
 	@Autowired
 	protected ServletContext application;
+
+	/**
+	 * 是否为 post 请求
+	 */
+	protected boolean isPost()
+	{
+		return HttpUtil.isPost(request);
+	}
 }
