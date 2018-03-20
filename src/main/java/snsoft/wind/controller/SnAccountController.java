@@ -7,8 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.baomidou.framework.controller.SuperController;
-
 import snsoft.wind.entity.SnUser;
 import snsoft.wind.service.ISnUserService;
 
@@ -26,7 +24,7 @@ import snsoft.wind.service.ISnUserService;
  */
 @Controller
 @RequestMapping("/account")
-public class SnAccountController extends SuperController
+public class SnAccountController extends SnBaseController
 {
 	@Resource(name = "sn-SnUserService")
 	private ISnUserService userService;
