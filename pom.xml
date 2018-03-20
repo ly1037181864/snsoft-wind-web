@@ -4,4 +4,104 @@
   <artifactId>snsoft-wind-web</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
+  
+  <name>snsoft-wind-web Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+  	<spring-wind.version>1.1.5</spring-wind.version>
+  </properties>
+  
+  
+  <dependencies>
+  	<dependency>
+  		<groupId>snsoft</groupId>
+  		<artifactId>springHibernate</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>spring-wind</artifactId>
+			<version>${spring-wind.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.baomidou</groupId>
+					<artifactId>mybatis-plus</artifactId>
+				</exclusion>
+			</exclusions>
+	</dependency>
+  </dependencies>
+  
+  <profiles>
+	<profile>
+		<id>jdk16</id>
+		<activation>
+			<activeByDefault>true</activeByDefault>
+			<jdk>1.6</jdk>
+		</activation>
+		<properties>
+			<maven.compiler.source>1.6</maven.compiler.source>
+			<maven.compiler.target>1.6</maven.compiler.target>
+			<maven.compiler.compilerVersion>1.6</maven.compiler.compilerVersion>
+			<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+		</properties>
+	</profile>
+  </profiles>
+	
+  <build>
+	<finalName>SpringWind</finalName>
+	<resources>
+		<resource>
+			<directory>src/main/java</directory>
+			<includes>
+				<include>**/*.xml</include>
+			</includes>
+		</resource>
+		<resource>
+			<directory>src/main/resources</directory>
+		</resource>
+	</resources>
+	<plugins>
+		<plugin>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<configuration>
+				<source>1.6</source>
+				<target>1.6</target>
+				<encoding>UTF-8</encoding>
+			</configuration>
+		</plugin>
+		<!--jetty 插件，mvn jetty:run -->
+		<plugin>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-maven-plugin</artifactId>
+			<version>9.3.7.v20160115</version>
+			<configuration>
+				<webApp>
+					<contextPath>/</contextPath>
+					<descriptor>${basedir}/src/main/webapp/WEB-INF/web.xml</descriptor>
+				</webApp>
+				<stopKey>exit</stopKey>
+				<stopPort>9091</stopPort>
+				<webAppSourceDirectory>${project.basedir}/src/main/webapp</webAppSourceDirectory>
+				<scanIntervalSeconds>0</scanIntervalSeconds>
+				<httpConnector>
+					<port>8080</port>
+				</httpConnector>
+			</configuration>
+		</plugin>
+		<!-- tomcat 插件，mvn tomcat:run -->
+		<plugin>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>tomcat-maven-plugin</artifactId>
+			<version>1.1</version>
+			<configuration>
+				<path>/</path>
+				<port>8080</port>
+				<uriEncoding>UTF-8</uriEncoding>
+				<warFile>${project.build.directory}/${project.build.finalName}.war</warFile>
+			</configuration>
+		</plugin>
+	</plugins>
+
+	</build>
 </project>
