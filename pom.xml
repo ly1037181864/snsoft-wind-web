@@ -3,7 +3,6 @@
   <groupId>snsoft</groupId>
   <artifactId>snsoft-wind-web</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
   
   <name>snsoft-wind-web Maven Webapp</name>
   <url>http://maven.apache.org</url>
@@ -15,11 +14,6 @@
   
   <dependencies>
   	<dependency>
-  		<groupId>snsoft</groupId>
-  		<artifactId>springHibernate</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<dependency>
 			<groupId>com.baomidou</groupId>
 			<artifactId>spring-wind</artifactId>
 			<version>${spring-wind.version}</version>
@@ -30,6 +24,11 @@
 				</exclusion>
 			</exclusions>
 	</dependency>
+  	<dependency>
+  		<groupId>snsoft</groupId>
+  		<artifactId>snsoft-common</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
   
   <profiles>
@@ -104,4 +103,5 @@
 	</plugins>
 
 	</build>
+  <packaging>war</packaging>
 </project>

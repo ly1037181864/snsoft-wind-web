@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,12 +15,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import snsoft.wind.comm.SnImageUtil;
 
 /**
- * <p>
- * 验证码服务
- * </p>
- *
- * @author hubin
- * @Date 2016-01-06
+ * <p>项目标题： 验证码服务</p>
+ * <p>项目功能： </p>
+ * <p>所属模块： TODO</p>
+ * <p>开发平台：Window10</p>
+ * <p>开发工具：Eclipse</p>
+ * <p>jar包:TODO</p>
+ * <p>创建日期：2018年3月22日 上午11:49:56</p>
+ * <p>项目作者：刘友</p>
+ * <p>类全名：snsoft.wind.controller.SnCaptchaController</p>
+ * @version 1.0
  */
 @Controller
 @RequestMapping("/captcha")
@@ -31,7 +36,8 @@ public class SnCaptchaController extends SnBaseController
 	 */
 	@ResponseBody
 	@RequestMapping("/image")
-	public void image() throws IOException
+	@Cacheable("captcha")
+	public String image() throws IOException
 	{
 		// 生成验证码图片
 		Object[] objs = SnImageUtil.createImage();
@@ -44,5 +50,6 @@ public class SnCaptchaController extends SnBaseController
 		OutputStream os = response.getOutputStream();
 		ImageIO.write((BufferedImage) objs[1], "png", os);
 		os.close();
+		return (String) objs[1];
 	}
 }
