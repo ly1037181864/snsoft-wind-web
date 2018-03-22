@@ -7,7 +7,7 @@ import java.io.OutputStream;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,7 +36,7 @@ public class SnCaptchaController extends SnBaseController
 	 */
 	@ResponseBody
 	@RequestMapping("/image")
-	@Cacheable("captcha")
+	@CachePut(key = "captcha")
 	public String image() throws IOException
 	{
 		// 生成验证码图片
@@ -50,6 +50,6 @@ public class SnCaptchaController extends SnBaseController
 		OutputStream os = response.getOutputStream();
 		ImageIO.write((BufferedImage) objs[1], "png", os);
 		os.close();
-		return (String) objs[1];
+		return (String) objs[0];
 	}
 }
