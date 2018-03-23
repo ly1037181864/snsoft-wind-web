@@ -20,6 +20,9 @@
 	<!-- 开启组件扫描支持： -->
 	<context:component-scan base-package="snsoft"/>
 	
+	<!-- 该配置必须跟servlet的配置文件一起，否则aop不起作用 -->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	
 	<!-- handlermapping等组件 -->
 	<mvc:annotation-driven>
 		<!-- 编码转换 -->

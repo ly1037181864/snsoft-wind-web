@@ -11,7 +11,6 @@
     <!-- 配置文件 --> 
     <context:property-placeholder location="classpath:properties/redis.properties"></context:property-placeholder>
                      
-	<cache:annotation-driven cache-manager="cacheManager"/>
     <!-- redis连接池 -->
     <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
          <property name="maxIdle" value="${redis.maxIdle}" />     
@@ -23,20 +22,17 @@
        p:host-name="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}" p:pool-config-ref="poolConfig"/>
     <!-- redis模板 -->
     <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">    
-         <property name="connectionFactory" ref="JedisConnectionFactory" />    
+         <property name="connectionFactory" ref="JedisConnectionFactory" /> 
+         <property name="keySerializer" >
+              <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+         </property>
+         <property name="valueSerializer" >
+              <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+         </property>   
     </bean>
      
-    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">    
-         <property name="caches">    
-            <set>    
-                <!-- 这里可以配置多个redis -->  
-                <bean class="snsoft.wind.comm.SnRedisCache">    
-                     <property name="redisTemplate" ref="redisTemplate" />    
-                     <property name="name" value="content"/>    
-                     <!-- name对应的名称要在类或方法的注解中使用 -->  
-                </bean>  
-            </set>    
-         </property>    
-     </bean>                 
-                        
+    <bean id="SnRedisCacheManager" class="snsoft.wind.redis.SnRedisCacheManager">
+    	<property name="redisTemplate" ref="redisTemplate" /> 
+    </bean>
+    
 </beans>
