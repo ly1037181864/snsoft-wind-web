@@ -1,9 +1,13 @@
 package snsoft.wind.redis;
 
+import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,11 +28,8 @@ import org.springframework.stereotype.Component;
 @Order(1)
 @Component
 @Aspect
-public class SnRedisAspect
+public class SnRedisAspect extends SnRedisCacheManager
 {
-	@Autowired
-	private RedisTemplate redisTemplate; 
-	
 	@Pointcut("@annotation(SnCacheable))")
 	public void pointCut()
 	{
@@ -38,14 +39,34 @@ public class SnRedisAspect
 	@AfterReturning(pointcut = "pointCut()", returning = "returnValue")
 	public void excuteRedis(JoinPoint point, Object returnValue)
 	{
-		System.out.println("进入Controller组件处理,返回值为" + returnValue);
-		if(redisTemplate!=null)
+		try
 		{
-			System.out.println("redis缓存成功");
-		}else
+			Method method = getMethod(point);
+			// 获取注解对象
+			SnCacheable cacheable = method.getAnnotation(SnCacheable.class);
+			String key = cacheable.key(); 
+			int expire = cacheable.expire();
+			//设置缓存失效时间
+			expire(key, expire);
+			//设置缓存
+			set(key, returnValue);
+			System.out.println("redis缓存成功："+get(key));
+		}catch(Exception e)
 		{
-			System.out.println("redis缓存失败");
+			throw new RuntimeException(e);
 		}
-		
 	}
+	
+	/**
+     * 
+     * @Title: getMethod
+     * @Description: 获取被拦截方法对象
+     * @param joinPoint
+     * @return
+     */
+    protected Method getMethod(JoinPoint joinPoint) throws Exception {
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        Method method = methodSignature.getMethod();
+        return method;
+    }
 }

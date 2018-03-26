@@ -37,8 +37,8 @@
     	 </property>  
     </bean>
      
-    <bean id="SnRedisCacheManager" class="snsoft.wind.redis.SnRedisCacheManager">
+    <!-- <bean id="SnRedisCacheManager" class="snsoft.wind.redis.SnRedisCacheManager">
     	<property name="redisTemplate" ref="redisTemplate" /> 
-    </bean>
+    </bean> -->
     
 </beans>

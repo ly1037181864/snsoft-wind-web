@@ -36,7 +36,7 @@ public class SnCaptchaController extends SnBaseController
 	 */
 	@ResponseBody
 	@RequestMapping("/image")
-	@SnCacheable(expire=3600)
+	@SnCacheable(key="captcha",expire=60)
 	public String image() throws IOException
 	{
 		// 生成验证码图片

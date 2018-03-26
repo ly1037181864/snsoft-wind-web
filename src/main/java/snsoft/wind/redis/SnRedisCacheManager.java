@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -20,22 +22,13 @@ import org.springframework.util.CollectionUtils;
  * <p>类全名：snsoft.wind.redis.SnRedisCacheManager</p>
  * @version 1.0
  */
+@Component
 public class SnRedisCacheManager
 {
-	/**redis**/
-	private RedisTemplate<String, Object> redisTemplate;
+	@Autowired
+	private RedisTemplate redisTemplate; 
 	/**失效时间**/
 	private static final Long TIMEOUT = 3000L;
-
-	public RedisTemplate<String, Object> getRedisTemplate()
-	{
-		return redisTemplate;
-	}
-
-	public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate)
-	{
-		this.redisTemplate = redisTemplate;
-	}
 
 	/**
 	* 指定缓存失效时间
