@@ -42,4 +42,18 @@ public class SnBaseController
 	{
 		return HttpUtil.isPost(request);
 	}
+
+	/**
+	 * 重定向至地址 url
+	 * 
+	 * @param url
+	 *            请求地址
+	 * @return
+	 */
+	protected String redirectTo(String url)
+	{
+		StringBuffer rto = new StringBuffer("redirect:");
+		rto.append(url);
+		return rto.toString();
+	}
 }

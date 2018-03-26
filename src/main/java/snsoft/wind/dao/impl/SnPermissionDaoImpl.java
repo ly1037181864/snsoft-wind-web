@@ -31,18 +31,21 @@ public class SnPermissionDaoImpl extends SnSuperDaoImpl implements ISnPermission
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	@Override
 	public List<SnMenuVO> selectMenuByUserId(Long userId, Long pid)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public List<SnPermission> selectAllByUserId(Long userId)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public SnPermission query(Long id)
 	{
 		Session session = null;
@@ -56,11 +59,13 @@ public class SnPermissionDaoImpl extends SnSuperDaoImpl implements ISnPermission
 		}
 	}
 
+	@Override
 	public SnPermission query(SnPermission per)
 	{
 		return null;
 	}
 
+	@Override
 	public SnPermission query(String fitler, Map<String, Object> params)
 	{
 		if (fitler != null && params != null && params.size() > 0)
@@ -84,6 +89,7 @@ public class SnPermissionDaoImpl extends SnSuperDaoImpl implements ISnPermission
 		return null;
 	}
 
+	@Override
 	public void save(SnPermission per)
 	{
 		Session session = null;
@@ -99,6 +105,7 @@ public class SnPermissionDaoImpl extends SnSuperDaoImpl implements ISnPermission
 		}
 	}
 
+	@Override
 	public void delete(SnPermission per)
 	{
 		Session session = null;
@@ -114,6 +121,7 @@ public class SnPermissionDaoImpl extends SnSuperDaoImpl implements ISnPermission
 		}
 	}
 
+	@Override
 	public void update(SnPermission per)
 	{
 		Session session = null;
@@ -129,6 +137,7 @@ public class SnPermissionDaoImpl extends SnSuperDaoImpl implements ISnPermission
 		}
 	}
 
+	@Override
 	public void update(Map<String, Object> params)
 	{
 		// TODO Auto-generated method stub

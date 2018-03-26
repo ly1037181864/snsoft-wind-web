@@ -1,5 +1,8 @@
 package snsoft.wind.service.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -29,9 +32,10 @@ public class SnUserServiceImpl implements ISnUserService
 	@Override
 	public SnUser selectByLoginName(String loginName)
 	{
-		SnUser user = new SnUser();
-		user.setLoginName(loginName);
-		return userDao.query(user);
+		String fitler = "loginName=:loginName";
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("loginName", loginName);
+		return userDao.query(fitler, params);
 	}
 
 	@Override

@@ -17,7 +17,7 @@
 	</bean>
 	
 	<!-- 配置Hibernate SessionFactory  -->
-	<bean id="sessionFactory"  class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+	<bean id="sessionFactory"  class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 	    <!-- 连接到的数据库 -->
 	    <property name="dataSource" ref="dataSource" />
 	    <!-- Hibernate 参数 -->
@@ -41,11 +41,11 @@
 	</bean> 
 	
 	<!-- 配置事务管理器 -->
-	<bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-	    <property name="sessionFactory" ref="sessionFactory" />
-	</bean> 
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
 	
 	<!-- 打开注解驱动的事务管理 -->
-	<tx:annotation-driven transaction-manager="txManager"/> 
+	<tx:annotation-driven transaction-manager="transactionManager"/> 
 	
 </beans>

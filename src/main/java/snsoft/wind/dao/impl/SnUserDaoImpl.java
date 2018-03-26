@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import snsoft.wind.dao.ISnUserDao;
 import snsoft.wind.entity.SnUser;
@@ -24,11 +25,13 @@ import snsoft.wind.entity.SnUser;
  * @version 1.0
  */
 @Repository("sn-SnUserDao")
+@Transactional
 public class SnUserDaoImpl extends SnSuperDaoImpl implements ISnUserDao
 {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	@Override
 	public SnUser query(Long id)
 	{
 		Session session = null;
@@ -42,11 +45,13 @@ public class SnUserDaoImpl extends SnSuperDaoImpl implements ISnUserDao
 		}
 	}
 
+	@Override
 	public SnUser query(SnUser user)
 	{
 		return null;
 	}
 
+	@Override
 	public SnUser query(String fitler, Map<String, Object> params)
 	{
 		if (fitler != null && params != null && params.size() > 0)
@@ -70,6 +75,7 @@ public class SnUserDaoImpl extends SnSuperDaoImpl implements ISnUserDao
 		return null;
 	}
 
+	@Override
 	public void save(SnUser user)
 	{
 		Session session = null;
@@ -85,6 +91,7 @@ public class SnUserDaoImpl extends SnSuperDaoImpl implements ISnUserDao
 		}
 	}
 
+	@Override
 	public void delete(SnUser user)
 	{
 		Session session = null;
@@ -100,6 +107,7 @@ public class SnUserDaoImpl extends SnSuperDaoImpl implements ISnUserDao
 		}
 	}
 
+	@Override
 	public void update(SnUser user)
 	{
 		Session session = null;
@@ -115,6 +123,7 @@ public class SnUserDaoImpl extends SnSuperDaoImpl implements ISnUserDao
 		}
 	}
 
+	@Override
 	public void update(Map<String, Object> params)
 	{
 	}
