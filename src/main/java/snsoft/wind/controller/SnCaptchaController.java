@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import snsoft.wind.comm.SnImageUtil;
-import snsoft.wind.redis.SnRedis;
+import snsoft.wind.redis.SnCacheable;
 
 /**
  * <p>项目标题： 验证码服务</p>
@@ -36,7 +36,7 @@ public class SnCaptchaController extends SnBaseController
 	 */
 	@ResponseBody
 	@RequestMapping("/image")
-	@SnRedis
+	@SnCacheable(expire=3600)
 	public String image() throws IOException
 	{
 		// 生成验证码图片

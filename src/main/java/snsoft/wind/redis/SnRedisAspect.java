@@ -4,7 +4,9 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,7 +26,10 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class SnRedisAspect
 {
-	@Pointcut("execution(* snsoft.wind.controller.SnCaptchaController.image())")
+	@Autowired
+	private RedisTemplate redisTemplate; 
+	
+	@Pointcut("@annotation(SnCacheable))")
 	public void pointCut()
 	{
 		System.out.println("进入Controller组件处理");
@@ -34,8 +39,13 @@ public class SnRedisAspect
 	public void excuteRedis(JoinPoint point, Object returnValue)
 	{
 		System.out.println("进入Controller组件处理,返回值为" + returnValue);
-		SnRedisCacheManager redis = new SnRedisCacheManager();
-		redis.set("captcha", returnValue);
-		System.out.println("redis已缓存" + redis.get("redis"));
+		if(redisTemplate!=null)
+		{
+			System.out.println("redis缓存成功");
+		}else
+		{
+			System.out.println("redis缓存失败");
+		}
+		
 	}
 }
