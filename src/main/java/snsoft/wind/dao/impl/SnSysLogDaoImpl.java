@@ -29,33 +29,34 @@ public class SnSysLogDaoImpl extends SnSuperDaoImpl implements ISnSysLogDao
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	@Override
 	public SnSysLog query(Long id)
 	{
-		Session session = null;
+		Session session = getSession();
 		try
 		{
-			session = sessionFactory.getCurrentSession();
 			return session.get(SnSysLog.class, String.valueOf(id));
 		} finally
 		{
-			close(session);
+			close();
 		}
 	}
 
+	@Override
 	public SnSysLog query(SnSysLog log)
 	{
 		return null;
 	}
 
+	@Override
 	public SnSysLog query(String fitler, Map<String, Object> params)
 	{
 		if (fitler != null && params != null && params.size() > 0)
 		{
 			String hql = "from SnSysLog where 1=1 and " + fitler;
-			Session session = null;
+			Session session = getSession();
 			try
 			{
-				session = sessionFactory.getCurrentSession();
 				Query query = session.createQuery(hql);
 				for (String key : params.keySet())
 				{
@@ -64,57 +65,58 @@ public class SnSysLogDaoImpl extends SnSuperDaoImpl implements ISnSysLogDao
 				return (SnSysLog) query.getSingleResult();
 			} finally
 			{
-				close(session);
+				close();
 			}
 		}
 		return null;
 	}
 
+	@Override
 	public void save(SnSysLog log)
 	{
-		Session session = null;
+		Session session = getSession();
 		boolean rollback = true;
 		try
 		{
-			session = sessionFactory.getCurrentSession();
 			session.save(log);
 			rollback = false;
 		} finally
 		{
-			commit(session, rollback);
+			commit(rollback);
 		}
 	}
 
+	@Override
 	public void delete(SnSysLog log)
 	{
-		Session session = null;
+		Session session = getSession();
 		boolean rollback = true;
 		try
 		{
-			session = sessionFactory.getCurrentSession();
 			session.delete(log);
 			rollback = false;
 		} finally
 		{
-			commit(session, rollback);
+			commit(rollback);
 		}
 	}
 
+	@Override
 	public void update(SnSysLog log)
 	{
-		Session session = null;
+		Session session = getSession();
 		boolean rollback = true;
 		try
 		{
-			session = sessionFactory.getCurrentSession();
 			session.update(log);
 			rollback = false;
 		} finally
 		{
-			commit(session, rollback);
+			commit(rollback);
 		}
 	}
 
+	@Override
 	public void update(Map<String, Object> params)
 	{
 	}

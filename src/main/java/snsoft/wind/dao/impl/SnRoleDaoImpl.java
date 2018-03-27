@@ -3,9 +3,7 @@ package snsoft.wind.dao.impl;
 import java.util.Map;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import snsoft.wind.dao.ISnRoleDao;
@@ -26,36 +24,35 @@ import snsoft.wind.entity.SnRole;
 @Repository("sn-SnRoleDao")
 public class SnRoleDaoImpl extends SnSuperDaoImpl implements ISnRoleDao
 {
-	@Autowired
-	private SessionFactory sessionFactory;
 
+	@Override
 	public SnRole query(Long id)
 	{
-		Session session = null;
+		Session session = getSession();
 		try
 		{
-			session = sessionFactory.getCurrentSession();
 			return session.get(SnRole.class, String.valueOf(id));
 		} finally
 		{
-			close(session);
+			close();
 		}
 	}
 
+	@Override
 	public SnRole query(SnRole t)
 	{
 		return null;
 	}
 
+	@Override
 	public SnRole query(String fitler, Map<String, Object> params)
 	{
 		if (fitler != null && params != null && params.size() > 0)
 		{
 			String hql = "from SnRolePermission where 1=1 and " + fitler;
-			Session session = null;
+			Session session = getSession();
 			try
 			{
-				session = sessionFactory.getCurrentSession();
 				Query query = session.createQuery(hql);
 				for (String key : params.keySet())
 				{
@@ -64,57 +61,58 @@ public class SnRoleDaoImpl extends SnSuperDaoImpl implements ISnRoleDao
 				return (SnRole) query.getSingleResult();
 			} finally
 			{
-				close(session);
+				close();
 			}
 		}
 		return null;
 	}
 
+	@Override
 	public void save(SnRole role)
 	{
-		Session session = null;
+		Session session = getSession();
 		boolean rollback = true;
 		try
 		{
-			session = sessionFactory.getCurrentSession();
 			session.save(role);
 			rollback = false;
 		} finally
 		{
-			commit(session, rollback);
+			commit(rollback);
 		}
 	}
 
+	@Override
 	public void delete(SnRole role)
 	{
-		Session session = null;
+		Session session = getSession();
 		boolean rollback = true;
 		try
 		{
-			session = sessionFactory.getCurrentSession();
 			session.delete(role);
 			rollback = false;
 		} finally
 		{
-			commit(session, rollback);
+			commit(rollback);
 		}
 	}
 
+	@Override
 	public void update(SnRole role)
 	{
-		Session session = null;
+		Session session = getSession();
 		boolean rollback = true;
 		try
 		{
-			session = sessionFactory.getCurrentSession();
 			session.update(role);
 			rollback = false;
 		} finally
 		{
-			commit(session, rollback);
+			commit(rollback);
 		}
 	}
 
+	@Override
 	public void update(Map<String, Object> params)
 	{
 		// TODO Auto-generated method stub

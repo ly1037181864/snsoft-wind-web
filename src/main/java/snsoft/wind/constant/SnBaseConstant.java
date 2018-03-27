@@ -15,4 +15,8 @@ package snsoft.wind.constant;
 public interface SnBaseConstant
 {
 	public final static String CAPTCHA_TOKEN = "ctoken";
+	public final static String COOKIE_MAXAGE = "sso_cookie_maxage";
+	public final static String ALGORITHM = "MD5";
+	public final static String CUT_SYMBOL = "#";
+	public final static String ENCODING = "UTF-8";
 }

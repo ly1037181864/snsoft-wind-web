@@ -4,9 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import snsoft.wind.dao.ISnPermissionDao;
@@ -28,8 +26,6 @@ import snsoft.wind.entity.vo.SnMenuVO;
 @Repository("sn-SnPermissionDao")
 public class SnPermissionDaoImpl extends SnSuperDaoImpl implements ISnPermissionDao
 {
-	@Autowired
-	private SessionFactory sessionFactory;
 
 	@Override
 	public List<SnMenuVO> selectMenuByUserId(Long userId, Long pid)
@@ -48,14 +44,13 @@ public class SnPermissionDaoImpl extends SnSuperDaoImpl implements ISnPermission
 	@Override
 	public SnPermission query(Long id)
 	{
-		Session session = null;
+		Session session = getSession();
 		try
 		{
-			session = sessionFactory.getCurrentSession();
 			return session.get(SnPermission.class, String.valueOf(id));
 		} finally
 		{
-			close(session);
+			close();
 		}
 	}
 
@@ -71,10 +66,9 @@ public class SnPermissionDaoImpl extends SnSuperDaoImpl implements ISnPermission
 		if (fitler != null && params != null && params.size() > 0)
 		{
 			String hql = "from SnPermission where 1=1 and " + fitler;
-			Session session = null;
+			Session session = getSession();
 			try
 			{
-				session = sessionFactory.getCurrentSession();
 				Query query = session.createQuery(hql);
 				for (String key : params.keySet())
 				{
@@ -83,7 +77,7 @@ public class SnPermissionDaoImpl extends SnSuperDaoImpl implements ISnPermission
 				return (SnPermission) query.getSingleResult();
 			} finally
 			{
-				close(session);
+				close();
 			}
 		}
 		return null;
@@ -92,48 +86,45 @@ public class SnPermissionDaoImpl extends SnSuperDaoImpl implements ISnPermission
 	@Override
 	public void save(SnPermission per)
 	{
-		Session session = null;
+		Session session = getSession();
 		boolean rollback = true;
 		try
 		{
-			session = sessionFactory.getCurrentSession();
 			session.save(per);
 			rollback = false;
 		} finally
 		{
-			commit(session, rollback);
+			commit(rollback);
 		}
 	}
 
 	@Override
 	public void delete(SnPermission per)
 	{
-		Session session = null;
+		Session session = getSession();
 		boolean rollback = true;
 		try
 		{
-			session = sessionFactory.getCurrentSession();
 			session.delete(per);
 			rollback = false;
 		} finally
 		{
-			commit(session, rollback);
+			commit(rollback);
 		}
 	}
 
 	@Override
 	public void update(SnPermission per)
 	{
-		Session session = null;
+		Session session = getSession();
 		boolean rollback = true;
 		try
 		{
-			session = sessionFactory.getCurrentSession();
 			session.update(per);
 			rollback = false;
 		} finally
 		{
-			commit(session, rollback);
+			commit(rollback);
 		}
 	}
 

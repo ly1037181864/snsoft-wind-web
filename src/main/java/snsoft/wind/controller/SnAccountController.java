@@ -61,16 +61,15 @@ public class SnAccountController extends SnBaseController
 					} else
 					{
 						SnUser user = userService.selectByLoginName(loginName);
-						if (user != null)
+						if (user != null && SnSaltEncoderUtil.md5SaltValid(loginName, user.getPassword(), password))
 						{
-							String pwd = SnSaltEncoderUtil.md5(user.getPassword());
-							if (password.equals(pwd))
+							String rememberMe = wr.getParameter("rememberMe");
+							if ("on".equals(rememberMe))
 							{
-								return redirectTo("/index.html");
-							} else
-							{
-								errorMsg += "密码不正确";
+								redisService.set(SnBaseConstant.COOKIE_MAXAGE, 3600);
+								redisService.expire(SnBaseConstant.COOKIE_MAXAGE, 3600);
 							}
+							return redirectTo("/index.html");
 						} else
 						{
 							errorMsg += "当前用户不存在";

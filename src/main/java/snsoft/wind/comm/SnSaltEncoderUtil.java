@@ -2,7 +2,10 @@ package snsoft.wind.comm;
 
 import java.security.MessageDigest;
 
-import com.baomidou.kisso.common.encrypt.base64.Base64;
+import com.baomidou.kisso.common.encrypt.Byte2Hex;
+import com.baomidou.kisso.common.encrypt.SaltEncoder;
+
+import snsoft.wind.constant.SnBaseConstant;
 
 /**
  * <p>标题： TODO</p>
@@ -21,24 +24,149 @@ import com.baomidou.kisso.common.encrypt.base64.Base64;
 public class SnSaltEncoderUtil
 {
 	/**
-	 * 将传入的src加密处理
-	 * @param src 明文字符串
-	 * @return 加密后的字符串结果
-	 * @throws Exception 
+	 * 盐值
 	 */
-	public static String md5(String src)
+	private String salt;
+
+	/**
+	 * 算法
+	 */
+	private String algorithm;
+
+	protected SnSaltEncoderUtil()
+	{
+		/* 保护 */
+	}
+
+	public SnSaltEncoderUtil(String salt, String algorithm)
+	{
+		this.salt = salt;
+		this.algorithm = algorithm;
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * md5 盐值加密字符串
+	 * </p>
+	 * 
+	 * @param salt
+	 * 				盐值
+	 * @param rawText
+	 *				需要加密的字符串
+	 * @return
+	 */
+	public static String md5SaltEncode(String salt, String rawText)
+	{
+		return new SaltEncoder(salt, SnBaseConstant.ALGORITHM).encode(rawText);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * 判断md5 盐值加密内容是否正确
+	 * </p>
+	 * 
+	 * @param salt
+	 * 				盐值
+	 * @param encodeText
+	 * 				加密后的文本内容
+	 * @param rawText
+	 * 				加密前的文本内容
+	 * @return
+	 */
+	public static boolean md5SaltValid(String salt, String encodeText, String rawText)
+	{
+		return new SaltEncoder(salt, SnBaseConstant.ALGORITHM).isValid(encodeText, rawText);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * 字符串盐值加密
+	 * </p>
+	 * 
+	 * @param rawText
+	 *            需要加密的字符串
+	 * @return
+	 */
+	public String encode(String rawText)
 	{
 		try
 		{
-			//将字符串信息采用MD5处理
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			byte[] output = md.digest(src.getBytes());
-			//将MD5处理结果利用Base64转成字符串
-			String s = Base64.toBase64String(output);
-			return s;
+			MessageDigest md = MessageDigest.getInstance(algorithm);
+			//加密后的字符串  
+			return Byte2Hex.byte2Hex(md.digest(mergeRawTextAndSalt(rawText).getBytes(SnBaseConstant.ENCODING)));
 		} catch (Exception e)
 		{
 			throw new RuntimeException(e);
 		}
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * 判断加密内容是否正确
+	 * </p>
+	 * 
+	 * @param encodeText
+	 * 				加密后的文本内容
+	 * @param rawText
+	 * 				加密前的文本内容
+	 * @return
+	 */
+	public boolean isValid(String encodeText, String rawText)
+	{
+		return this.encode(rawText).equals(encodeText);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * 合并混淆盐值至加密内容
+	 * </p>
+	 * 
+	 * @param rawText
+	 * 				需要加密的字符串
+	 * @return
+	 */
+	private String mergeRawTextAndSalt(String rawText)
+	{
+		if (rawText == null)
+		{
+			rawText = "";
+		}
+
+		if (this.salt == null || "".equals(this.salt))
+		{
+			return rawText;
+		} else
+		{
+			StringBuffer mt = new StringBuffer();
+			mt.append(rawText);
+			mt.append(SnBaseConstant.CUT_SYMBOL);
+			mt.append(this.salt);
+			return mt.toString();
+		}
+	}
+
+	public String getSalt()
+	{
+		return salt;
+	}
+
+	public void setSalt(String salt)
+	{
+		this.salt = salt;
+	}
+
+	public String getAlgorithm()
+	{
+		return algorithm;
+	}
+
+	public void setAlgorithm(String algorithm)
+	{
+		this.algorithm = algorithm;
 	}
 }

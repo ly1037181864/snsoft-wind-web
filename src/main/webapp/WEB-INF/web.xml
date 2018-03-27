@@ -10,6 +10,18 @@
 	<param-name>contextConfigLocation</param-name>
 	<param-value>classpath:config/app-*.xml</param-value>
   </context-param>
+  <context-param>  
+      <param-name>spring.profiles.active</param-name>  
+      <param-value>dev</param-value>  
+  </context-param>  
+  <context-param>  
+      <param-name>spring.profiles.default</param-name>  
+      <param-value>dev</param-value>  
+  </context-param>  
+  <context-param>  
+      <param-name>spring.liveBeansView.mbeanDomain</param-name>  
+      <param-value>dev</param-value>  
+  </context-param>  
   
   <!-- Spring 监听启动 -->
 	<listener>

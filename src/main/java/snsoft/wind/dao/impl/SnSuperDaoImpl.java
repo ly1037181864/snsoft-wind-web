@@ -1,7 +1,10 @@
 package snsoft.wind.dao.impl;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * <p>项目标题： TODO</p>
@@ -15,10 +18,27 @@ import org.hibernate.Transaction;
  * <p>类全名：snsoft.wind.dao.impl.SnSuperDaoImpl</p>
  * @version 1.0
  */
+@Component
 public class SnSuperDaoImpl
 {
-	protected void commit(Session session, boolean rollback)
+	@Autowired
+	private SessionFactory sessionFactory;
+	public static final ThreadLocal<Session> local = new ThreadLocal<Session>();
+
+	protected Session getSession()
 	{
+		Session session = sessionFactory.openSession();
+		if (session == null)
+		{
+			throw new RuntimeException("初始化session异常！！！");
+		}
+		local.set(session);
+		return session;
+	}
+
+	protected void commit(boolean rollback)
+	{
+		Session session = local.get();
 		if (session != null)
 		{
 			try
@@ -33,16 +53,18 @@ public class SnSuperDaoImpl
 				}
 			} finally
 			{
-				close(session);
+				close();
 			}
 		}
 	}
 
-	protected void close(Session session)
+	protected void close()
 	{
+		Session session = local.get();
 		if (session != null)
 		{
 			session.close();
 		}
+		local.remove();
 	}
 }

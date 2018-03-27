@@ -4,9 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import snsoft.wind.dao.ISnRolePermissionDao;
@@ -27,42 +25,42 @@ import snsoft.wind.entity.SnRolePermission;
 @Repository("sn-SnRolePermissionDao")
 public class SnRolePermissionDaoImpl extends SnSuperDaoImpl implements ISnRolePermissionDao
 {
-	@Autowired
-	private SessionFactory sessionFactory;
 
+	@Override
 	public List<Long> selecPermissionIdsByRoleId(Long id)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public SnRolePermission query(Long id)
 	{
-		Session session = null;
+		Session session = getSession();
 		try
 		{
-			session = sessionFactory.getCurrentSession();
 			return session.get(SnRolePermission.class, String.valueOf(id));
 		} finally
 		{
-			close(session);
+			close();
 		}
 	}
 
+	@Override
 	public SnRolePermission query(SnRolePermission rolePer)
 	{
 		return null;
 	}
 
+	@Override
 	public SnRolePermission query(String fitler, Map<String, Object> params)
 	{
 		if (fitler != null && params != null && params.size() > 0)
 		{
 			String hql = "from SnRolePermission where 1=1 and " + fitler;
-			Session session = null;
+			Session session = getSession();
 			try
 			{
-				session = sessionFactory.getCurrentSession();
 				Query query = session.createQuery(hql);
 				for (String key : params.keySet())
 				{
@@ -71,57 +69,58 @@ public class SnRolePermissionDaoImpl extends SnSuperDaoImpl implements ISnRolePe
 				return (SnRolePermission) query.getSingleResult();
 			} finally
 			{
-				close(session);
+				close();
 			}
 		}
 		return null;
 	}
 
+	@Override
 	public void save(SnRolePermission rolePer)
 	{
-		Session session = null;
+		Session session = getSession();
 		boolean rollback = true;
 		try
 		{
-			session = sessionFactory.getCurrentSession();
 			session.save(rolePer);
 			rollback = false;
 		} finally
 		{
-			commit(session, rollback);
+			commit(rollback);
 		}
 	}
 
+	@Override
 	public void delete(SnRolePermission rolePer)
 	{
 		Session session = null;
 		boolean rollback = true;
 		try
 		{
-			session = sessionFactory.getCurrentSession();
 			session.delete(rolePer);
 			rollback = false;
 		} finally
 		{
-			commit(session, rollback);
+			commit(rollback);
 		}
 	}
 
+	@Override
 	public void update(SnRolePermission rolePer)
 	{
 		Session session = null;
 		boolean rollback = true;
 		try
 		{
-			session = sessionFactory.getCurrentSession();
 			session.update(rolePer);
 			rollback = false;
 		} finally
 		{
-			commit(session, rollback);
+			commit(rollback);
 		}
 	}
 
+	@Override
 	public void update(Map<String, Object> params)
 	{
 		// TODO Auto-generated method stub
