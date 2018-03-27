@@ -1,5 +1,7 @@
 package snsoft.wind.dao;
 
+import java.util.List;
+
 import snsoft.wind.entity.SnSysLog;
 
 /**
@@ -16,4 +18,10 @@ import snsoft.wind.entity.SnSysLog;
  */
 public interface ISnSysLogDao extends ISnSuperDao<SnSysLog>
 {
+	/**分页查询
+	 * @param size
+	 * @param index
+	 * @return
+	 */
+	public List<SnSysLog> queryByPage(int index, int size);
 }

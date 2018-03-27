@@ -1,11 +1,11 @@
 package snsoft.wind.dao.impl;
 
+import java.util.List;
 import java.util.Map;
 
+import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import snsoft.wind.dao.ISnSysLogDao;
@@ -26,8 +26,6 @@ import snsoft.wind.entity.SnSysLog;
 @Repository("sn-SnSysLogDao")
 public class SnSysLogDaoImpl extends SnSuperDaoImpl implements ISnSysLogDao
 {
-	@Autowired
-	private SessionFactory sessionFactory;
 
 	@Override
 	public SnSysLog query(Long id)
@@ -119,5 +117,41 @@ public class SnSysLogDaoImpl extends SnSuperDaoImpl implements ISnSysLogDao
 	@Override
 	public void update(Map<String, Object> params)
 	{
+	}
+
+	@Override
+	public List<SnSysLog> queryByPage(int index, int size)
+	{
+		Session session = getSession();
+		try
+		{
+			String hql = "from SnSysLog";
+			Query query = session.createQuery(hql);
+			//得到滚动结果集
+			ScrollableResults scroll = query.scroll();
+			//滚动到最后一行
+			scroll.last();
+			query.setFirstResult(index);
+			query.setMaxResults(size);
+			return query.list();
+		} finally
+		{
+			close();
+		}
+	}
+
+	@Override
+	public List<SnSysLog> loadAll()
+	{
+		String hql = "from SnSysLog";
+		Session session = getSession();
+		try
+		{
+			Query query = session.createQuery(hql);
+			return query.list();
+		} finally
+		{
+			close();
+		}
 	}
 }

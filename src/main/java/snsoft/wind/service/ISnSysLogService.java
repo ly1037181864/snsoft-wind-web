@@ -1,5 +1,9 @@
 package snsoft.wind.service;
 
+import java.util.List;
+
+import snsoft.wind.entity.SnSysLog;
+
 /**
  * <p>项目标题： TODO</p>
  * <p>项目功能： </p>
@@ -14,4 +18,14 @@ package snsoft.wind.service;
  */
 public interface ISnSysLogService
 {
+	/**
+	 * 删除
+	 */
+	public void deleteById(Long id);
+
+	/**分页查询
+	 * @param size
+	 * @param index
+	 */
+	public List<SnSysLog> selectByPage(int index, int size);
 }

@@ -1,5 +1,6 @@
 package snsoft.wind.dao.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Session;
@@ -115,5 +116,20 @@ public class SnUserDaoImpl extends SnSuperDaoImpl implements ISnUserDao
 	@Override
 	public void update(Map<String, Object> params)
 	{
+	}
+
+	@Override
+	public List<SnUser> loadAll()
+	{
+		String hql = "from SnUser";
+		Session session = getSession();
+		try
+		{
+			Query query = session.createQuery(hql);
+			return query.list();
+		} finally
+		{
+			close();
+		}
 	}
 }

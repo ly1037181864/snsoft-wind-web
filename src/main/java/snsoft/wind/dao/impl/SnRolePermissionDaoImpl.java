@@ -125,4 +125,19 @@ public class SnRolePermissionDaoImpl extends SnSuperDaoImpl implements ISnRolePe
 	{
 		// TODO Auto-generated method stub
 	}
+
+	@Override
+	public List<SnRolePermission> loadAll()
+	{
+		String hql = "from SnRolePermission";
+		Session session = getSession();
+		try
+		{
+			Query query = session.createQuery(hql);
+			return query.list();
+		} finally
+		{
+			close();
+		}
+	}
 }

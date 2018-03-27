@@ -1,7 +1,9 @@
 package snsoft.wind.dao.impl;
 
+import java.util.List;
 import java.util.Map;
 
+import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
@@ -49,7 +51,7 @@ public class SnRoleDaoImpl extends SnSuperDaoImpl implements ISnRoleDao
 	{
 		if (fitler != null && params != null && params.size() > 0)
 		{
-			String hql = "from SnRolePermission where 1=1 and " + fitler;
+			String hql = "from SnRole where 1=1 and " + fitler;
 			Session session = getSession();
 			try
 			{
@@ -116,5 +118,42 @@ public class SnRoleDaoImpl extends SnSuperDaoImpl implements ISnRoleDao
 	public void update(Map<String, Object> params)
 	{
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public List<SnRole> queryByPage(int index, int size)
+	{
+		String hql = "from SnRole";
+		Session session = getSession();
+		try
+		{
+			Query query = session.createQuery(hql);
+			//得到滚动结果集
+			ScrollableResults scroll = query.scroll();
+			//滚动到最后一行
+			scroll.last();
+			//设置分页位置
+			query.setFirstResult(index);
+			query.setMaxResults(size);
+			return query.list();
+		} finally
+		{
+			close();
+		}
+	}
+
+	@Override
+	public List<SnRole> loadAll()
+	{
+		String hql = "from SnRole";
+		Session session = getSession();
+		try
+		{
+			Query query = session.createQuery(hql);
+			return query.list();
+		} finally
+		{
+			close();
+		}
 	}
 }

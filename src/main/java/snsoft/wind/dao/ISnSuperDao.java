@@ -1,5 +1,6 @@
 package snsoft.wind.dao;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,4 +55,10 @@ public interface ISnSuperDao<T>
 	 * @param params
 	 */
 	void update(Map<String, Object> params);
+
+	/**
+	 * 加载所有
+	 * @return
+	 */
+	List<T> loadAll();
 }

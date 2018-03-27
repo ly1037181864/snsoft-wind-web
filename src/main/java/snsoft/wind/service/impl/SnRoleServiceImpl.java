@@ -1,11 +1,13 @@
 package snsoft.wind.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import snsoft.wind.dao.ISnUserRoleDao;
-import snsoft.wind.entity.SnUserRole;
+import snsoft.wind.dao.ISnRoleDao;
+import snsoft.wind.entity.SnRole;
 import snsoft.wind.service.ISnRoleService;
 
 /**
@@ -23,13 +25,44 @@ import snsoft.wind.service.ISnRoleService;
 @Service("sn-SnRoleService")
 public class SnRoleServiceImpl implements ISnRoleService
 {
-	@Resource(name = "sn-SnUserRoleDao")
-	private ISnUserRoleDao userRoleDao;
+	@Resource(name = "sn-SnRoleDao")
+	private ISnRoleDao roleDao;
 
-	public void deleteByUserId(Long userId)
+	@Override
+	public List<SnRole> queryByPage(int index, int size)
 	{
-		SnUserRole ur = new SnUserRole();
-		ur.setUid(userId);
-		userRoleDao.delete(ur);
+		return roleDao.queryByPage(index, size);
+	}
+
+	@Override
+	public void deleteById(Long id)
+	{
+		SnRole role = new SnRole();
+		role.setId(id);
+		roleDao.delete(role);
+	}
+
+	@Override
+	public void update(SnRole role)
+	{
+		roleDao.update(role);
+	}
+
+	@Override
+	public void insert(SnRole role)
+	{
+		roleDao.save(role);
+	}
+
+	@Override
+	public SnRole selectById(Long id)
+	{
+		return roleDao.query(id);
+	}
+
+	@Override
+	public List<SnRole> loadAll()
+	{
+		return roleDao.loadAll();
 	}
 }

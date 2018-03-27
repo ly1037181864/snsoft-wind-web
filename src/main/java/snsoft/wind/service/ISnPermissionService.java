@@ -22,6 +22,7 @@ public interface ISnPermissionService
 	List<SnMenuVO> selectMenuVOByUserId(Long userId);
 
 	List<SnPermission> selectAllByUserId(Long userId);
+
 	/**
 	 * <p>是否为可操作的权限</p>
 	 * @param token SSO 票据顶级父类
@@ -29,4 +30,9 @@ public interface ISnPermissionService
 	 * @return
 	 */
 	// boolean isActionable(Token token, String permission);
+	public void deleteById(Long id);
+
+	public List<SnPermission> queryByPage(int index, int size);
+
+	public List<SnPermission> loadAll();
 }

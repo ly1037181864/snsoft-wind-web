@@ -22,4 +22,6 @@ public interface ISnPermissionDao extends ISnSuperDao<SnPermission>
 	List<SnMenuVO> selectMenuByUserId(Long userId, Long pid);
 
 	List<SnPermission> selectAllByUserId(Long userId);
+
+	public List<SnPermission> queryByPage(int index, int size);
 }

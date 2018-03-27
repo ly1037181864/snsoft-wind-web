@@ -3,9 +3,12 @@ package snsoft.wind.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import snsoft.wind.dao.ISnPermissionDao;
 import snsoft.wind.entity.SnPermission;
 import snsoft.wind.entity.vo.SnMenuVO;
 import snsoft.wind.service.ISnPermissionService;
@@ -23,31 +26,11 @@ import snsoft.wind.service.ISnPermissionService;
  * @version 1.0
  */
 @Service("sn-SnPermissionService")
-public class SnPermissionServiceImpl implements ISnPermissionService// ,
-																	// SSOAuthorization
+public class SnPermissionServiceImpl implements ISnPermissionService
 {
-	// @Override
-	// public boolean isPermitted(Token token, String permission)
-	// {
-	// /**
-	// * 菜单级别、权限验证，生产环境建议加上缓存处理。
-	// */
-	// if (StringUtils.isNotBlank(permission))
-	// {
-	// List<SnPermission> pl = this.selectAllByUserId(token.getId());
-	// if (pl != null)
-	// {
-	// for (SnPermission p : pl)
-	// {
-	// if (permission.equals(p.getPermCode()))
-	// {
-	// return true;
-	// }
-	// }
-	// }
-	// }
-	// return false;
-	// }
+	@Resource(name = "sn-SnPermissionDao")
+	ISnPermissionDao snPermissionDao;
+
 	@Override
 	@Cacheable(value = "permissionCache", key = "#userId")
 	public List<SnMenuVO> selectMenuVOByUserId(Long userId)
@@ -73,18 +56,24 @@ public class SnPermissionServiceImpl implements ISnPermissionService// ,
 	{
 		return null;
 	}
-	// @Override
-	// public boolean isActionable(Token token, String permission)
-	// {
-	// /**
-	// * 按钮级别、权限验证，生产环境建议加上缓存处理。<br>
-	// * 演示 admin 返回 true
-	// */
-	// System.err.println(" isActionable =" + permission);
-	// if (token.getId() == 1L)
-	// {
-	// return true;
-	// }
-	// return false;
-	// }
+
+	@Override
+	public void deleteById(Long id)
+	{
+		SnPermission sion = new SnPermission();
+		sion.setId(id);
+		snPermissionDao.delete(sion);
+	}
+
+	@Override
+	public List<SnPermission> queryByPage(int index, int size)
+	{
+		return snPermissionDao.queryByPage(index, size);
+	}
+
+	@Override
+	public List<SnPermission> loadAll()
+	{
+		return snPermissionDao.loadAll();
+	}
 }

@@ -1,5 +1,7 @@
 package snsoft.wind.dao;
 
+import java.util.List;
+
 import snsoft.wind.entity.SnRole;
 
 /**
@@ -16,4 +18,5 @@ import snsoft.wind.entity.SnRole;
  */
 public interface ISnRoleDao extends ISnSuperDao<SnRole>
 {
+	public List<SnRole> queryByPage(int index, int size);
 }
