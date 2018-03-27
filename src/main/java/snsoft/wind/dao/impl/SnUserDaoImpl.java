@@ -132,4 +132,22 @@ public class SnUserDaoImpl extends SnSuperDaoImpl implements ISnUserDao
 			close();
 		}
 	}
+
+	@Override
+	public List<SnUser> queryByPage(int index, int size)
+	{
+		String hql = "from SnUser";
+		Session session = getSession();
+		try
+		{
+			Query query = session.createQuery(hql);
+			//设置分页位置
+			query.setFirstResult(index);
+			query.setMaxResults(size);
+			return query.list();
+		} finally
+		{
+			close();
+		}
+	}
 }

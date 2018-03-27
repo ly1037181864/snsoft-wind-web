@@ -1,6 +1,9 @@
 package snsoft.wind.controller;
 
+import java.util.Date;
+
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -8,11 +11,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.baomidou.kisso.common.encrypt.SaltEncoder;
 import com.baomidou.kisso.common.util.RandomUtil;
 import com.baomidou.kisso.web.waf.request.WafRequestWrapper;
 
 import snsoft.wind.comm.SnSaltEncoderUtil;
 import snsoft.wind.constant.SnBaseConstant;
+import snsoft.wind.constant.enums.SnUserType;
 import snsoft.wind.entity.SnUser;
 import snsoft.wind.service.ISnRedisService;
 import snsoft.wind.service.ISnUserService;
@@ -99,6 +104,19 @@ public class SnAccountController extends SnBaseController
 	{ RequestMethod.POST })
 	public String register(Model model, SnUser user)
 	{
+		if (isPost())
+		{
+			SnUser existUser = userService.selectByLoginName(user.getLoginName());
+			if (existUser == null)
+			{
+				user.setPassword(SaltEncoder.md5SaltEncode(user.getLoginName(), user.getPassword()));
+				user.setType(SnUserType.MEMBER.key());
+				user.setCrTime(new Date());
+				user.setLastTime(user.getCrTime());
+				userService.insert(user);
+				return redirectTo("/index.html");
+			}
+		}
 		model.addAttribute("tipMsg", "注册用户名【" + user.getLoginName() + "】已存在！");
 		return "/register";
 	}
@@ -109,7 +127,7 @@ public class SnAccountController extends SnBaseController
 	@RequestMapping("/logout")
 	public String logout(Model model)
 	{
-		return "redirect:/account/login.html";
+		return redirectTo("/account/login.html");
 	}
 
 	/**
@@ -118,7 +136,20 @@ public class SnAccountController extends SnBaseController
 	@RequestMapping("/lockscreen")
 	public String lockscreen(Model model, String password)
 	{
-		model.addAttribute("loginName", "");
+		HttpSession session = request.getSession();
+		String loginName = (String) session.getAttribute(SnBaseConstant.LOCKSCREEN_USER_FLAG);
+		if (StringUtils.isBlank(loginName))
+		{
+			//session.setAttribute(SnBaseConstant.LOCKSCREEN_USER_FLAG, loginName);
+		} else if (StringUtils.isNotBlank(password) && isPost())
+		{
+			SnUser user = userService.selectByLoginName(loginName);
+			if (user != null && SaltEncoder.md5SaltValid(loginName, user.getPassword(), password))
+			{
+				return redirectTo("/index.html");
+			}
+		}
+		model.addAttribute("loginName", loginName);
 		return "/lockscreen";
 	}
 }

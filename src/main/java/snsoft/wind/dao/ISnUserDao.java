@@ -1,5 +1,7 @@
 package snsoft.wind.dao;
 
+import java.util.List;
+
 import snsoft.wind.entity.SnUser;
 
 /**
@@ -16,4 +18,5 @@ import snsoft.wind.entity.SnUser;
  */
 public interface ISnUserDao extends ISnSuperDao<SnUser>
 {
+	public List<SnUser> queryByPage(int index, int size);
 }

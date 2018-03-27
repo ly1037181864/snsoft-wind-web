@@ -1,6 +1,7 @@
 package snsoft.wind.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -50,5 +51,23 @@ public class SnUserServiceImpl implements ISnUserService
 	public SnUser selectById(Long userId)
 	{
 		return userDao.query(userId);
+	}
+
+	@Override
+	public void insert(SnUser user)
+	{
+		userDao.save(user);
+	}
+
+	@Override
+	public void update(SnUser user)
+	{
+		userDao.update(user);
+	}
+
+	@Override
+	public List<SnUser> queryByPage(int index, int size)
+	{
+		return userDao.queryByPage(index, size);
 	}
 }

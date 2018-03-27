@@ -19,4 +19,5 @@ public interface SnBaseConstant
 	public final static String ALGORITHM = "MD5";
 	public final static String CUT_SYMBOL = "#";
 	public final static String ENCODING = "UTF-8";
+	public final static String LOCKSCREEN_USER_FLAG = "LockscreenUserFlag";
 }
