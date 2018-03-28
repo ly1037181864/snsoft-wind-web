@@ -50,6 +50,23 @@ public class SnPermissionServiceImpl implements ISnPermissionService
 			mv.setUrl((String) obj[2]);
 			mv.setPermCode((String) obj[3]);
 			mv.setIcon((String) obj[4]);
+			List gMvs = snPermissionDao.selectMenuByUserId(userId, mv.getId());
+			if (gMvs != null && gMvs.size() > 0)
+			{
+				List<SnMenuVO> gvList = new ArrayList<SnMenuVO>();
+				for (int n = 0; n < gMvs.size(); n++)
+				{
+					Object[] gObj = (Object[]) gMvs.get(n);
+					SnMenuVO gv = new SnMenuVO();
+					gv.setId(Long.parseLong(String.valueOf(gObj[0])));
+					gv.setTitle((String) gObj[1]);
+					gv.setUrl((String) gObj[2]);
+					gv.setPermCode((String) gObj[3]);
+					gv.setIcon((String) gObj[4]);
+					gvList.add(gv);
+				}
+				mv.setMvList(gvList);
+			}
 			mvList.add(mv);
 		}
 		return mvList;
