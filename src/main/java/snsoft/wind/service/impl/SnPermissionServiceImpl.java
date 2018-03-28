@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import snsoft.wind.dao.ISnPermissionDao;
@@ -31,27 +30,32 @@ public class SnPermissionServiceImpl implements ISnPermissionService
 	@Resource(name = "sn-SnPermissionDao")
 	ISnPermissionDao snPermissionDao;
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	@Cacheable(value = "permissionCache", key = "#userId")
 	public List<SnMenuVO> selectMenuVOByUserId(Long userId)
 	{
-		List<SnMenuVO> perList = null;// baseMapper.selectMenuByUserId(userId,
-										// 0L);
+		List perList = snPermissionDao.selectMenuByUserId(userId, 0L);
 		if (perList == null || perList.isEmpty())
 		{
 			return null;
 		}
 		List<SnMenuVO> mvList = new ArrayList<SnMenuVO>();
-		for (SnMenuVO mv : perList)
+		System.out.println(perList.size());
+		for (int i = 0; i < perList.size(); i++)
 		{
-			// mv.setMvList(baseMapper.selectMenuByUserId(userId, mv.getId()));
+			Object[] obj = (Object[]) perList.get(i);
+			SnMenuVO mv = new SnMenuVO();
+			mv.setId(Long.parseLong(String.valueOf(obj[0])));
+			mv.setTitle((String) obj[1]);
+			mv.setUrl((String) obj[2]);
+			mv.setPermCode((String) obj[3]);
+			mv.setIcon((String) obj[4]);
 			mvList.add(mv);
 		}
 		return mvList;
 	}
 
 	@Override
-	@Cacheable(value = "permissionCache", key = "#userId")
 	public List<SnPermission> selectAllByUserId(Long userId)
 	{
 		return null;

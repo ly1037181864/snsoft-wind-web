@@ -72,4 +72,11 @@
 	<!-- 网站图标，注意 ！favicon.ico 放在 webapp 目录 -->
 	<mvc:resources mapping="/favicon.ico" location="/favicon.ico"/>
 	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/index.html" />
+			<bean class="snsoft.wind.controller.SnBaseController" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
 </beans>

@@ -68,6 +68,11 @@ public class SnAccountController extends SnBaseController
 						SnUser user = userService.selectByLoginName(loginName);
 						if (user != null && SnSaltEncoderUtil.md5SaltValid(loginName, user.getPassword(), password))
 						{
+							//将用户信息注入到redis中
+							redisService.set("loginName", loginName);
+							redisService.expire("loginName", 7200);
+							redisService.set("uid", user.getId());
+							redisService.expire("uid", 7200);
 							String rememberMe = wr.getParameter("rememberMe");
 							if ("on".equals(rememberMe))
 							{

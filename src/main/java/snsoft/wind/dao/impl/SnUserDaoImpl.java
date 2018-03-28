@@ -32,7 +32,7 @@ public class SnUserDaoImpl extends SnSuperDaoImpl implements ISnUserDao
 		Session session = getSession();
 		try
 		{
-			return session.get(SnUser.class, String.valueOf(id));
+			return session.get(SnUser.class, id);
 		} finally
 		{
 			close();

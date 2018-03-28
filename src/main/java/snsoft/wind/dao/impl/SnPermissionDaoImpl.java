@@ -1,5 +1,6 @@
 package snsoft.wind.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +32,26 @@ public class SnPermissionDaoImpl extends SnSuperDaoImpl implements ISnPermission
 	@Override
 	public List<SnMenuVO> selectMenuByUserId(Long userId, Long pid)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		String hql = "SELECT id, title, url, permCode, icon FROM permission p RIGHT JOIN";
+		hql += " (SELECT DISTINCT r.pid FROM role_permission r WHERE EXISTS ( ";
+		hql += " SELECT 1 FROM user_role u WHERE u.uid=:userId AND r.rid=u.rid )) a ON p.id=a.pid ";
+		hql += " WHERE p.pid=:pid AND type=0 ORDER BY sort ";
+		Session session = getSession();
+		try
+		{
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("userId", userId);
+			params.put("pid", pid);
+			Query query = session.createSQLQuery(hql);
+			for (String key : params.keySet())
+			{
+				query.setParameter(key, params.get(key));
+			}
+			return query.list();
+		} finally
+		{
+			close();
+		}
 	}
 
 	@Override
