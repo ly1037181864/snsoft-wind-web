@@ -3,6 +3,7 @@ package snsoft.wind.controller;
 import java.util.Date;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
@@ -48,9 +49,19 @@ public class SnAccountController extends SnBaseController
 	{
 		if (isPost())
 		{
+
 			String errorMsg = "";
 			// 过滤 XSS SQL 注入
 			WafRequestWrapper wr = new WafRequestWrapper(request);
+			String auto = wr.getParameter("auto");
+			if (auto != null)
+			{
+				String loginName = wr.getParameter("loginName");
+				if (loginName != null)
+				{
+					return redirectTo("/index.html");
+				}
+			}
 			String captcha = wr.getParameter("captcha");
 			if (StringUtils.isNotBlank(captcha))
 			{
@@ -76,6 +87,10 @@ public class SnAccountController extends SnBaseController
 							String rememberMe = wr.getParameter("rememberMe");
 							if ("on".equals(rememberMe))
 							{
+								Cookie cookie = new Cookie("loginName", String.valueOf(user.getId()));
+								cookie.setMaxAge(2 * 3600 * 1000);
+								cookie.setPath("/");
+								response.addCookie(cookie);
 								redisService.set(SnBaseConstant.COOKIE_MAXAGE, 3600);
 								redisService.expire(SnBaseConstant.COOKIE_MAXAGE, 3600);
 							}

@@ -12,7 +12,19 @@ SpringWind 管理系统 - 登录
                 <h1 class="logo-name">SW</h1>
             </div>
             <h3 class="text-center">欢迎使用 SpringWind</h3>
-            <form class="m-t" role="form" method="post" action="#springUrl('/account/login.html')">
+            <form id="f1" class="m-t" role="form" method="post" action="#springUrl('/account/login.html')" style="display:none;">
+            	<div class="form-group">
+                    <input id="loginName" type="text" name="loginName" class="form-control" placeholder="用户名" required="">
+                </div>
+                <div class="form-group">
+                    <input id="auto" type="text" name="auto" class="form-control" placeholder="自动登录" required="">
+                </div>
+                <div class="form-group form-inline">
+                    <div class="checkbox i-checks"><label><input type="checkbox" name="rememberMe"><i></i>&nbsp;记住我</label></div>
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
+            </form>
+            <form id="f2" class="m-t" role="form" method="post" action="#springUrl('/account/login.html')">
                 <div class="form-group">
                     <input type="text" name="loginName" class="form-control" placeholder="用户名" required="">
                 </div>
@@ -46,6 +58,7 @@ SpringWind 管理系统 - 登录
 </body>
 #end
 #override("js")
+<script src="#springUrl('/static/js/plugins/autoLogin/auto.js')"></script>
 <script src="#springUrl('/static/js/plugins/iCheck/icheck.min.js')"></script>
 <script>
    $(document).ready(function(){
